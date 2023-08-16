@@ -65,3 +65,8 @@ export default {
     name:"NavBar"
 }
 </script>
+<style>
+.router-link-active, .router-link-exact-active{
+  color: greenyellow;
+}
+</style>

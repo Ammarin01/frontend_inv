@@ -23,12 +23,17 @@
 
               <form>
                 <label class="block mt-3 mb-2 text-sm text-gray-700" for="email">อีเมล์</label>
-                <input class="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none" id="email" type="text" autocomplete="email">
-
+                <input v-model="email" class="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none" id="email" type="text" autocomplete="email">
+                <div v-if="v$.email.$error" class="mt-2 text-sm text-red-500">
+                  {{v$.email.$errors[0].$message}}
+                </div>
                 <label class="block mt-3 mb-2 text-sm text-gray-700" for="password">รหัสผ่าน</label>
-                <input class="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none" id="password" type="password" autocomplete="current-password">
-
-               <input type="button" class="block w-full px-4 py-2 mt-4 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg cursor-pointer active:bg-purple-600 hover:bg-purple-700" value="เข้าสู่ระบบ">
+                <input v-model="password" class="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow appearance-none" id="password" type="password" autocomplete="current-password">
+                <div v-if="v$.password.$error" class="mt-2 text-red-500">
+                  {{v$.password.$errors[0].$message}}
+                </div>
+               <input @click="submitForm" type="button" class="block w-full px-4 py-2 mt-4 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg cursor-pointer active:bg-purple-600 hover:bg-purple-700" value="เข้าสู่ระบบ">
+             
               </form>
 
               <p class="my-8"></p>
@@ -70,4 +75,68 @@
         </div>
       </div>
     </div>
+
 </template>
+<script>
+
+  import useValidate from '@vuelidate/core'
+  import {required, email, minLength, helpers} from '@vuelidate/validators'
+  import http from "@/services/AuthService";
+export default{
+  data() {
+    return {
+    v$:useValidate(),
+    email: '',
+    password: '',  
+    }
+  },
+
+  methods: {
+    submitForm(){
+      // alert(id);
+      this.v$.$validate();
+  if (!this.v$.$error) {
+    
+    //เรียกใช้งาน api
+    http.post('login',{
+      "email":this.email,
+      "password":this.password,
+    }).then(response=>{
+      console.log(response.data);
+      //เก็บข้อมูล user ลง localStorage
+        localStorage.setItem('user', JSON.stringify(response.data))
+        // ล็อคอินผ่าน ส่งไปหน้า dashboard
+        this.$router.push('backend') 
+
+    }).catch(error=>{
+      if (error.response) {
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      }
+    })
+
+  }else{
+    // alert('ไม่ok');
+  }
+    }
+  },
+
+  validations(){
+    return{
+      email:
+      {
+        required:helpers.withMessage('ป้อนอีเมล์ก่อน',required),
+       email:helpers.withMessage('รูปแบบอีเมล์ไม่ถูกต้อง',email),
+       },
+      password:
+      { 
+        required:helpers.withMessage('ป้อนรหัสผ่านก่อน',required),
+        minLength:helpers.withMessage(({$params})=>`รหัสผ่านต้องไม่น้อยกว่า ${$params.min}ตัวอักษร`,minLength(6)),
+        },
+    }
+  },
+}
+
+
+</script>
