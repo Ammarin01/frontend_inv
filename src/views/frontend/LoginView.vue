@@ -106,13 +106,30 @@ export default{
       //เก็บข้อมูล user ลง localStorage
         localStorage.setItem('user', JSON.stringify(response.data))
         // ล็อคอินผ่าน ส่งไปหน้า dashboard
-        this.$router.push('backend') 
+        
+        this.$swal({
+          icon: 'success',
+          title: 'กำลังเข้าสู่ระบบ',
+          showConfirmButton:false,
+          timer:3000,
+          }).then(()=>{
+          this.$router.push('backend') 
+          })
 
     }).catch(error=>{
       if (error.response) {
-        console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
+        // console.log(error.response.data);
+        // console.log(error.response.status);
+        // console.log(error.response.headers);
+        if (error.response.status==401) {
+          //เรียก popup sweetalert2
+          this.$swal({
+             icon: 'error',
+          title: 'Oops...',
+          text: 'ไม่พบข้อมูล!',
+          footer: '<a href="">Why do I have this issue?</a>'
+          })
+        }
       }
     })
 
