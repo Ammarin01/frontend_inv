@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 //import latout
 import FrontendLayout from '@/layouts/Frontend.vue';
 
+
 //import frontend
 
 import HomeView from '@/views/frontend/HomeView.vue'
@@ -15,6 +16,7 @@ import RegisterView from '@/views/frontend/RegisterView.vue'
 import ServiceView from '@/views/frontend/ServiceView.vue'
 import NotfoundView from '@/views/frontend/NotfoundView.vue'
 
+//impost Backend
 
 
 const routes = [
