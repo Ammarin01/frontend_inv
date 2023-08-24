@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 //import views
 //import latout
 import FrontendLayout from '@/layouts/Frontend.vue';
+import BackendendLayout from '@/layouts/Backend.vue';
 
 
 //import frontend
@@ -17,7 +18,8 @@ import ServiceView from '@/views/frontend/ServiceView.vue'
 import NotfoundView from '@/views/frontend/NotfoundView.vue'
 
 //impost Backend
-
+import DashboardView from '@/views/backend/Dashboard.vue'
+import ProductsView from '@/views/backend/Products.vue'
 
 const routes = [
   {
@@ -148,7 +150,38 @@ const routes = [
       title:'404 ไม่พบหน้านี้',
       description:'Error 404',
     }
-  }
+  },
+
+  {
+    path: '/backend',
+    name: 'Dashboard',
+    component: BackendendLayout,
+    children:[
+      {
+        path: '',
+        component:DashboardView
+      }
+    ],
+    meta:{
+      title:'Dashboard'
+    }
+  },
+
+  {
+    path: '/backend/products',
+    name: 'ProductsView',
+    component: BackendendLayout,
+    children:[
+      {
+        path: '',
+        component:ProductsView
+      }
+    ],
+    meta:{
+      title:'Products'
+    }
+  },
+ 
 
 ]
 

@@ -543,3 +543,9 @@
         </div>
     </div>
 </template>
+<script>
+export default {
+  name: 'DashboardView',
+  // Other component properties and methods here
+}
+</script>

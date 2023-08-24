@@ -249,10 +249,16 @@
                         <span>Log out</span>
                       </a>
                     </li>
-                  </ul>
+                  </ul> 
                 </template>
               </li>
             </ul>
           </div>
         </header>
 </template>
+<script>
+export default {
+  name: 'NavbarView',
+  // Other component properties and methods here
+}
+</script>

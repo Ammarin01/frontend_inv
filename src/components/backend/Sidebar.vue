@@ -54,7 +54,7 @@
           </ul>
           <ul>
             <li class="relative px-6 py-3">
-              <button @click="onclickLogout" class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-red-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-red-700 focus:outline-none focus:shadow-outline-purple">Logout</button>
+              <button @click="onclickLogout()" class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-red-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-red-700 focus:outline-none focus:shadow-outline-purple">Logout</button>
             </li>
           </ul>
         </div>
@@ -112,3 +112,17 @@
         </div>
       </aside>
 </template>
+<script>
+export default {
+  name: 'SidebarView',
+  // Other component properties and methods here
+  methods: {
+    onclickLogout(){
+      localStorage.removeItem('user')
+      //กลับไปหน้า login
+      // this.$router.push({name: 'login'}) 
+      window.location.href = window.location.origin + '/login'
+    }
+  },
+}
+</script>
