@@ -113,8 +113,8 @@ export default{
           showConfirmButton:false,
           timer:3000,
           }).then(()=>{
-          // this.$router.push('backend')
-          window.location.href='/backend'
+          this.$router.push({name:'Dashboard'})
+          // window.location.href='/backend'
           })
 
     }).catch(error=>{

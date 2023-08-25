@@ -32,7 +32,7 @@
           </ul>
           <ul>
             <li class="relative px-6 py-3">
-              <router-link to="/backend/products"
+              <router-link to="/backend/productsView"
                 class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
                 href="forms.html">
                 <svg
@@ -120,8 +120,8 @@ export default {
     onclickLogout(){
       localStorage.removeItem('user')
       //กลับไปหน้า login
-      // this.$router.push({name: 'login'}) 
-      window.location.href = window.location.origin + '/login'
+      this.$router.push({name: 'Login'}) 
+      // window.location.href = window.location.origin + '/login'
     }
   },
 }

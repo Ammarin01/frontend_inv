@@ -24,11 +24,11 @@ import ProductsView from '@/views/backend/Products.vue'
 const routes = [
   {
     path: '/service',
-    name: 'service',
     component: FrontendLayout,
     children:[
       {
         path:'',
+        name: 'Service',
         component:ServiceView
       }
     ],
@@ -39,11 +39,11 @@ const routes = [
   },
   {
     path: '/register',
-    name: 'register',
     component: FrontendLayout,
     children:[
       {
         path:'',
+        name: 'Register',
         component:RegisterView
       }
     ],
@@ -54,11 +54,11 @@ const routes = [
   },
   {
     path: '/port',
-    name: 'port',
     component: FrontendLayout,
     children:[
       {
         path:'',
+        name: 'Port',
         component:PortfolioView
       }
     ],
@@ -69,11 +69,11 @@ const routes = [
   },
   {
     path: '/',
-    name: 'home',
     component: FrontendLayout,
     children:[
       {
         path:'',
+        name: 'Home',
         component:HomeView
       }
     ],
@@ -84,11 +84,11 @@ const routes = [
   },
   {
     path: '/contact',
-    name: 'contact',
     component: FrontendLayout,
     children:[
       {
         path:'',
+        name: 'Contact',
         component:ContactView
       }
     ],
@@ -99,11 +99,11 @@ const routes = [
   },
   {
     path: '/forgot',
-    name: 'forgot',
     component: FrontendLayout,
     children:[
       {
         path:'',
+        name: 'Forgot',
         component:ForgotPasswordView
       }
     ],
@@ -114,11 +114,11 @@ const routes = [
   },
   {
     path: '/login',
-    name: 'login',
     component: FrontendLayout,
     children:[
       {
         path:'',
+        name: 'Login',
         component:LoginView
       }
     ],
@@ -129,11 +129,11 @@ const routes = [
   },
   {
     path: '/about',
-    name: 'about',
     component: FrontendLayout,
     children:[
       {
         path:'',
+        name: 'About',
         component:AboutView
       }
     ],
@@ -154,11 +154,11 @@ const routes = [
 
   {
     path: '/backend',
-    name: 'Dashboard',
     component: BackendendLayout,
     children:[
       {
         path: '',
+        name: 'Dashboard',
         component:DashboardView
       }
     ],
@@ -168,12 +168,12 @@ const routes = [
   },
 
   {
-    path: '/backend/products',
-    name: 'ProductsView',
+    path: '/backend',
     component: BackendendLayout,
     children:[
       {
-        path: '',
+        path: 'productsView',
+        name: 'ProductsView',
         component:ProductsView
       }
     ],
