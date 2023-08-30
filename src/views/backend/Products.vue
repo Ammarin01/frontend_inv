@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center justify-between my-8">
+<div class="flex items-center justify-between my-8">
         <h2 class="my-6 text-sm font-semibold text-gray-700 md:text-xl dark:text-gray-200">
             Product list ({{ products.total }})
         </h2>
@@ -49,7 +49,7 @@
             </div>
         </div>
 
-        <button  class="flex items-center justify-between px-4 py-2 mx-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-green-500 border border-transparent rounded-lg active:bg-purple-600 hover:bg-green-700 focus:outline-none focus:shadow-outline-purple">
+        <button  @click="openModelAddProduct" class="flex items-center justify-between px-4 py-2 mx-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-green-500 border border-transparent rounded-lg active:bg-purple-600 hover:bg-green-700 focus:outline-none focus:shadow-outline-purple">
             <svg class="w-4 h-4 mr-2 -ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
             </svg>
@@ -113,31 +113,219 @@
                     </tr>
                 </tbody>
         </table>
+        <!-- ตัวแบ่งหน้า -->
+        <VueTailwindPagination 
+            :current='currenPage'
+            :total='total'
+            :per-page='perPage'
+            @page-changed="onPageClick($event)"
+        />
+
+        
+    <!-- Popup สำหรับเพิ่มรายการสินค้าใหม่ -->
+    <div v-if="showAddmodel" id="addProductModal" class="fixed top-0 left-0 flex items-center justify-center w-full h-full modal">
+        <div class="absolute w-full h-full bg-gray-900 opacity-70 modal-overlay"></div>
+         <div class="z-50 w-11/12 p-5 mx-auto overflow-y-auto bg-white rounded shadow-lg h-4/5 modal-container md:max-w-md">
+            <!-- Header -->
+            <div class="flex items-center justify-center w-full h-auto">
+                <div class="flex items-start justify-start w-full h-auto py-2 text-xl font-bold">
+                    เพิ่มสินค้าใหม่
+                </div>
+                <div @click="closeAddModelProduct" class="flex justify-center w-1/12 h-auto cursor-pointer">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </div>
+            <!--Header End-->
+            </div>
+            <!-- Modal Content-->
+            <div class="w-full h-auto mb-4">
+                <form ref="addProductFrom" @submit.prevent="onSubmit" enctype="multipart/form-data" >
+                    
+                    <label class="block my-3 text-gray-700 text-md" for="name">ชื่อสินค้า</label>
+                    <input v-model="name" class="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow" type="text" placeholder="Product name">
+                    <div v-if="v$.name.$error" class="mt-2 text-sm text-red-500">
+                    {{v$.name.$errors[0].$message}}
+                    </div>
+
+
+                    <label class="block my-3 text-gray-700 text-md" for="slug">สลัก</label>
+                    <input v-model="slug" class="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow" type="text" placeholder="product-name">
+                   <div v-if="v$.slug.$error" class="mt-2 text-sm text-red-500">
+                    {{v$.slug.$errors[0].$message}}
+                    </div>
+
+                    <label class="block my-3 text-gray-700 text-md" for="description">รายละเอียด</label>
+                    <textarea
+                    v-model="description"
+                    class="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow"
+                    rows="5"
+                    placeholder="Product description"
+                    ></textarea>
+
+                    <label class="block my-3 text-gray-700 text-md" for="price">ราคา</label>
+                    <input v-model="price" class="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow" type="text" placeholder="0.00">
+                    <div v-if="v$.price.$error" class="mt-2 text-sm text-red-500">
+                    {{v$.price.$errors[0].$message}}
+                    </div>
+                
+                    <div class="mt-4">
+                        <img v-if="imgUrl" :src="imgUrl" class="w-ful" />
+                    </div>
+
+                    <label class="block my-3 text-gray-700 text-md" for="image">ภาพสินค้า</label>
+                    <input  ref="fileupload" @change="onFileChange"   class="w-full px-3 py-2 leading-tight text-gray-700 border rounded shadow" type="file">
+         
+                    <div class="grid grid-cols-3 gap-4">
+                        
+                        <div class="col-span-2">
+                            <button  @click="submitForm" class="w-full px-4 py-2 mt-4 font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg text-md active:bg-purple-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-purple">
+                                บันทึกรายการ
+                            </button>
+                        </div>
+
+                        <div>
+                            <button @click="onResetForm"  class="w-full px-4 py-2 mt-4 font-medium leading-5 text-white transition-colors duration-150 bg-gray-500 border border-transparent rounded-lg text-md active:bg-purple-600 hover:bg-gray-700 focus:outline-none focus:shadow-outline-purple">
+                                ล้าง
+                            </button>
+                        </div>
+                        
+                    </div>
+                </form>
+            </div>
+         </div>
+    </div>
+
+
     </div>
 </div>
-  </template>
+</template>
 <script>
 import http from '@/services/BackendService'
-import '@ocrv/vue-tailwind-pagination/styles.css'
+import '@ocrv/vue-tailwind-pagination/styles'
 import VueTailwindPagination from '@ocrv/vue-tailwind-pagination'
-
+import useVuelidate from '@vuelidate/core'
+import { required,helpers } from '@vuelidate/validators';
 export default {
   name: 'ProductsView',
       data(){
-      return{
-        products: [],
-        currenPage: 0
-      }
+           return{
+                /**ตัวแปรสำหรับเรียกใช้งาน validation**/
+                v$:useVuelidate(),
+                    /** read product**/
+                products: [],
+                currentPage: 0,
+                perPage: 0,
+                total: 0,
+                /** ตัวแปรเปิดปิด popup**/
+                showAddmodel: false,
+                //ตัวแปรสำหรับผูกกับฟอร์มสินค้า
+
+                name:'',
+                description:'',
+                slug:'',
+                price:'',
+                imgSrc:'',
+                fileName:'',
+                imgUrl:'',
+                file:null,
+            }
           },
+
+          components:{
+            VueTailwindPagination
+          },
+          methods:{
+            
+
+
+            //ฟังก์ชั่นสำหรับดึงข้อมูลรายการสินค้าจาก api
+            async getProducts(pageNumber){
+                let response = await http.get(`products?page=${pageNumber}`)
+                let responseProduct = response.data
+                
+                this.products = responseProduct.data
+                this.currentPage  = responseProduct.current_page 
+                this.perPage = responseProduct.per_page
+                this.total = responseProduct.total
+                this.products.total = responseProduct.total
+            },
+            //สร้างฟังก์ชันสำหรับการเปลี่ยนหน้า
+            onPageClick(e){
+                this.currentPage = e
+                this.getProducts(this.currentPage)
+            },
+            //ส่วนของการเพิ่มสินค้าใหม่
+            //ฟังก์ชันเปิด  popup
+            openModelAddProduct(){
+                this.showAddmodel = true
+            },
+            //ฟังก์ชันเปิด  popup
+            closeAddModelProduct(){
+                this.showAddmodel = false
+                this.onResetForm()
+            },
+            //เลือกรูปภาพสินค้า
+            onFileChange(e){
+                const file = e.target.files[0]
+                this.file = e.target.files[0]
+                this.imgUrl = URL.createObjectURL(file)
+            },
+            //ฟังก์ชัน เคลียข้อมูล
+            onResetForm(){
+                //เคลียค่าทั้งหมด ต้องใช้ ref
+                this.$refs.addProductFrom.reset()
+                this.name = ''
+                this.description = ''
+                this.slug = ''
+                this.price = ''
+                this.imgSrc = ''
+                this.fileName = ''
+                this.imgUrl = ''
+                this.file =''
+                this.$refs.fileupload.value =null
+            },
+            //ฟังก์ชันสำหรับเพิ่มสินค้า
+            submitForm(){
+                this.v$.$validate()
+                if (!this.v$.$error) {
+                    // alert('ok');
+                    //ใช้ FormData ของ html 5 api ในการรับค่าจากฟอร์มที่มีการแนบไฟล์
+                    let data = new FormData
+                    data.append('name',this.name)
+                    data.append('description',this.description)
+                    data.append('slug',this.slug)
+                    data.append('file',this.file)
+                    data.append('price',this.price)
+
+                    //ส่งค่าไปยัง laravel product add
+                    http.post('products',
+                    data
+                    ).then((response)=>{
+                        console.log(response);
+                    })
+                }
+            }
+
+          },
+        validations(){
+            return{
+
+                name:{
+                    required:helpers.withMessage('ป้อนชื่อสินค้า',required),
+                },
+                slug:{
+                    required:helpers.withMessage('ป้อนสลักก่อน',required),
+                },
+                price:{
+                    required:helpers.withMessage('ป้อนราคาก่อน',required),
+                }
+            }
+        },
+
  mounted(){
-  this.currenPage = 1 ;
+  this.currentPage = 1 ;
   //อ่านสินค้าจาก api
-  http.get(`products?page=${this.currenPage}`).then(response=>{
-    let responseProduct = response.data
-    this.products = responseProduct.data
-    this.products.total = responseProduct.total
-    console.log(this.products)
-  })
+  this.getProducts(this.currentPage)
+
  }
 }
 </script>
