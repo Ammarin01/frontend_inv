@@ -14,11 +14,11 @@ const BackendService = axios.create({
     // baseURL:"http://localhost:8000/api/",
     baseURL:process.env.VUE_APP_URL_API,
     withCredentials:true,
-    headers:{
-        "Content-Type": "application/json",
+    headers: {
+        "Content-type": "multipart/form-data",
         "Accept": "application/json",
         // "Authorization": `Bearer ${token}`
-    },
+      },
 });
 
 //การใช้ interceptors เพื่อแทรก token เข้าไปใน header
